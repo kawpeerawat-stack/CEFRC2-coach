@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "checkpoint.schema.json",
+  "title": "Checkpoint",
+  "description": "ผลสอบภายนอกหนึ่งครั้ง (store: checkpoints) — ใช้เทียบกับคะแนน AI ในแอป",
+  "type": "object",
+  "required": ["id", "date", "exam", "planMonth", "overall", "cefr", "skills", "createdAt"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "date": { "type": "string", "format": "date" },
+    "exam": { "type": "string", "description": "EF SET | Aptis Advanced | IELTS Academic | Cambridge C2 Proficiency | ผู้ตรวจจริง | อื่น ๆ" },
+    "planMonth": { "type": ["integer", "null"], "description": "จุดตรวจตามแผนที่ผลนี้ตอบ (0, 6, 12, 18, 24) หรือ null" },
+    "overall": { "type": "string", "description": "คะแนนรวมตามที่ผู้จัดสอบรายงาน" },
+    "cefr": { "enum": ["", "A2", "B1", "B1+", "B2", "B2+", "C1", "C1+", "C2"] },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "listening": { "type": "string" },
+        "reading": { "type": "string" },
+        "speaking": { "type": "string" },
+        "writing": { "type": "string" }
+      }
+    },
+    "note": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  }
+}

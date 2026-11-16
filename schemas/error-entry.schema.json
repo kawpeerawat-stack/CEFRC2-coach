@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error-entry.schema.json",
+  "title": "Error entry",
+  "description": "ข้อผิดพลาดที่เกิดซ้ำในคลังข้อผิดพลาดส่วนตัว (store: errors)",
+  "type": "object",
+  "required": ["id", "category", "wrong", "correct", "note", "count", "resolved", "lastSeen", "createdAt"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "category": { "enum": ["article", "preposition", "collocation", "register", "cohesion", "stress", "grammar", "other"] },
+    "wrong": { "type": "string", "minLength": 1 },
+    "correct": { "type": "string" },
+    "note": { "type": "string" },
+    "count": { "type": "integer", "minimum": 1, "description": "จำนวนครั้งที่พบ" },
+    "resolved": { "type": "boolean" },
+    "sourceId": { "type": ["string", "null"], "description": "id ของ submission ที่พบครั้งแรก" },
+    "lastSeen": { "type": "string", "format": "date" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  }
+}

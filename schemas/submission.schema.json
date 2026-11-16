@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "submission.schema.json",
+  "title": "Submission",
+  "description": "งานที่ส่งหนึ่งฉบับ (store: submissions) — ฉบับแก้ไขใช้ rootId เดียวกันและ version เพิ่มขึ้น",
+  "type": "object",
+  "required": ["id", "rootId", "version", "module", "skill", "taskId", "taskType", "level", "text", "result", "createdAt"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "rootId": { "type": ["string", "null"], "description": "id ของฉบับที่ 1 ในรอบเดียวกัน" },
+    "version": { "type": "integer", "minimum": 1, "description": "1 = ส่งครั้งแรก (นับเป็นหลักฐาน), 2+ = Redo" },
+    "module": { "enum": ["writing", "speaking", "mediation", "reformulator"] },
+    "skill": { "enum": ["listening", "reading", "spoken-interaction", "spoken-production", "writing", "mediation"] },
+    "taskId": { "type": ["string", "null"] },
+    "taskType": { "type": "string" },
+    "level": { "type": "string" },
+    "text": { "type": "string", "description": "ข้อความที่เขียน หรือ transcript ที่ผู้ใช้ตรวจแก้แล้ว" },
+    "wordCount": { "type": "integer", "minimum": 0 },
+    "durationSec": { "type": "number", "minimum": 0 },
+    "targetPhrases": { "type": "array", "maxItems": 2, "items": { "type": "string" } },
+    "turns": {
+      "type": "array",
+      "description": "เฉพาะงานพูด",
+      "items": {
+        "type": "object",
+        "required": ["role", "text"],
+        "additionalProperties": false,
+        "properties": { "role": { "enum": ["user", "examiner"] }, "text": { "type": "string" }, "durationSec": { "type": "number", "minimum": 0 } }
+      }
+    },
+    "result": { "oneOf": [{ "type": "null" }, { "$ref": "rubric-result.schema.json" }] },
+    "attempt": { "type": "string", "description": "เฉพาะ reformulator: ฉบับที่ผู้ใช้ลองแก้เอง" },
+    "output": { "type": "object", "description": "เฉพาะ reformulator: ผลจาก ai.generate('reformulate')" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  }
+}

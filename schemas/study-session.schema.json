@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "study-session.schema.json",
+  "title": "Study session",
+  "description": "บันทึกเวลาฝึกหนึ่งครั้ง (store: sessions) — ใช้คำนวณชั่วโมงสะสมและ streak",
+  "type": "object",
+  "required": ["id", "date", "minutes", "skill", "module", "kind", "createdAt"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "date": { "type": "string", "format": "date", "description": "วันที่ตามเวลาท้องถิ่น (YYYY-MM-DD)" },
+    "minutes": { "type": "integer", "minimum": 1 },
+    "skill": { "enum": ["listening", "reading", "spoken-interaction", "spoken-production", "writing", "mediation", "mixed"] },
+    "module": { "type": "string", "description": "writing | speaking | reading | listening | mediation | vault | mock | manual" },
+    "kind": { "enum": ["loop", "extensive", "mock", "review", "manual"] },
+    "note": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  }
+}

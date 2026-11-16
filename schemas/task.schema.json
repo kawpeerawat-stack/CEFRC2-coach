@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "task.schema.json",
+  "title": "Task",
+  "description": "โจทย์งานเขียน งานพูด หรือ Mediation (js/data/tasks.js)",
+  "type": "object",
+  "required": ["id", "level", "type", "title", "prompt"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "ไม่ซ้ำกันทั้งแอป" },
+    "level": { "enum": ["B1", "B2", "C1", "C2"] },
+    "type": { "type": "string", "description": "ประเภทงาน ใช้นับ 'งาน 3 ประเภทที่ต่างกัน' ในเกณฑ์ C2-ready" },
+    "title": { "type": "string" },
+    "prompt": { "type": "string" },
+    "minWords": { "type": "integer", "minimum": 1 },
+    "minutes": { "type": "number", "exclusiveMinimum": 0 },
+    "mode": { "enum": ["production", "interaction"], "description": "เฉพาะงานพูด" },
+    "audience": { "type": "string", "description": "ผู้อ่าน/ผู้ฟังเป้าหมาย (Mediation)" },
+    "diagnostic": { "type": "boolean", "description": "งานวัดระดับ ไม่แสดงในรายการปกติ" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "text"],
+        "additionalProperties": false,
+        "properties": { "title": { "type": "string" }, "text": { "type": "string" } }
+      }
+    }
+  }
+}

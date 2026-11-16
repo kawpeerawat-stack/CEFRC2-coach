@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rubric-result.schema.json",
+  "title": "Rubric result",
+  "description": "ผลประเมินหลังผ่านกฎใน js/scoring.js (finalizeResult) — เก็บอยู่ใน submission.result",
+  "type": "object",
+  "required": ["rubricId", "provider", "isMock", "formative", "disclaimer", "ratedAt", "criteria", "total", "minScore", "overall", "overallLabel", "ceilingApplied", "complete", "pass", "strengths", "weaknesses", "flags", "targetPhrases", "reformulations", "errors", "nextAction"],
+  "additionalProperties": false,
+  "properties": {
+    "rubricId": { "enum": ["writing", "speaking"] },
+    "provider": { "type": "string", "description": "mock | claude | provider อื่นที่เพิ่มภายหลัง" },
+    "model": { "type": "string" },
+    "isMock": { "type": "boolean", "description": "true = ไม่นับเป็นหลักฐานระดับ" },
+    "formative": { "const": true },
+    "disclaimer": { "type": "string" },
+    "ratedAt": { "type": "string", "format": "date-time" },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "en", "weight", "status", "score", "evidence", "comment"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "en": { "type": "string" },
+          "weight": { "type": "number" },
+          "effWeight": { "type": "number", "description": "น้ำหนักหลังตัดเกณฑ์ N/A (รวม 100)" },
+          "status": { "enum": ["scored", "cannot_assess", "na"] },
+          "score": { "type": ["integer", "null"], "minimum": 0, "maximum": 5 },
+          "band": { "type": "string" },
+          "comment": { "type": "string" },
+          "reason": { "type": "string", "description": "เหตุผลเมื่อประเมินไม่ได้หรือ N/A" },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["quote", "timestamp", "comment"],
+              "additionalProperties": false,
+              "properties": {
+                "quote": { "type": "string", "description": "ต้องพบจริงในข้อความของผู้ใช้" },
+                "timestamp": { "type": "string" },
+                "comment": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "total": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+    "minScore": { "type": ["integer", "null"], "minimum": 0, "maximum": 5 },
+    "overall": { "type": ["integer", "null"], "minimum": 0, "maximum": 5, "description": "ไม่เกินเกณฑ์ต่ำสุด + 1" },
+    "overallLabel": { "type": "string" },
+    "ceilingApplied": { "type": "boolean" },
+    "complete": { "type": "boolean", "description": "ทุกเกณฑ์ที่ใช้กับงานนี้มีคะแนนพร้อมหลักฐาน" },
+    "pass": { "type": "boolean", "description": "ผ่านเกณฑ์ C2 ของงานชิ้นนี้: complete, total >= 85, minScore >= 4 และไม่ใช่ mock" },
+    "strengths": { "type": "array", "items": { "type": "object", "required": ["point", "evidence"], "additionalProperties": false, "properties": { "point": { "type": "string" }, "evidence": { "type": "string" } } } },
+    "weaknesses": { "type": "array", "items": { "type": "object", "required": ["point", "evidence", "fix"], "additionalProperties": false, "properties": { "point": { "type": "string" }, "evidence": { "type": "string" }, "fix": { "type": "string" } } } },
+    "flags": {
+      "type": "object",
+      "required": ["overEngineered", "cliches"],
+      "additionalProperties": false,
+      "properties": {
+        "overEngineered": { "type": "array", "items": { "type": "string" } },
+        "cliches": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "targetPhrases": {
+      "type": "array",
+      "maxItems": 2,
+      "items": { "type": "object", "required": ["phrase", "used", "natural", "passed", "comment"], "additionalProperties": false, "properties": { "phrase": { "type": "string" }, "used": { "type": "boolean" }, "natural": { "type": "boolean" }, "passed": { "type": "boolean" }, "comment": { "type": "string" } } }
+    },
+    "reformulations": { "type": "array", "items": { "type": "object", "required": ["original", "why", "rewrite", "chunk"], "additionalProperties": false, "properties": { "original": { "type": "string" }, "why": { "type": "string" }, "rewrite": { "type": "string" }, "chunk": { "type": "string" } } } },
+    "errors": { "type": "array", "items": { "type": "object", "required": ["category", "wrong", "correct", "note"], "additionalProperties": false, "properties": { "category": { "type": "string" }, "wrong": { "type": "string" }, "correct": { "type": "string" }, "note": { "type": "string" } } } },
+    "nextAction": { "type": "string" }
+  }
+}
